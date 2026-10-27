@@ -28,7 +28,7 @@ async function listPhotoFiles(){
   const isImg=n=>/\.(jpe?g|png|webp|avif)$/i.test(n);
   const nat=(a,b)=>a.name.localeCompare(b.name,undefined,{numeric:true});
   const host=location.protocol==='file:'?'file':location.hostname;
-  const LOCAL=(typeof RENDER!=='undefined'&&RENDER)||C.source==='local'||(C.source!=='github'&&/^(file|localhost|127\.|192\.168\.|10\.|\[::1\])/.test(host));
+  const LOCAL=/render=1|bikin=1/.test(location.search)||C.source==='local'||(C.source!=='github'&&/^(file|localhost|127\.|192\.168\.|10\.|\[::1\])/.test(host));
   const raw=n=>`https://raw.githubusercontent.com/${C.repo}/${branch}/${folder}/${encodeURIComponent(n)}`;
   const viaGithub=async()=>{
     if(!C.repo)return[];
@@ -47,7 +47,8 @@ async function listPhotoFiles(){
   const viaManifest=async()=>{   // foto/daftar.json = ["a.jpg","b.jpg"]  (dibuat otomatis: node daftar.js)
     try{const r=await fetch(folder+'/daftar.json');if(!r.ok)return[];const j=await r.json();return j.filter(isImg).map(n=>({name:n,url:folder+'/'+encodeURIComponent(n)}))}catch(e){return[]}
   };
-  for(const fn of(LOCAL?[viaDir,viaManifest,viaGithub]:[viaGithub,viaManifest,viaDir])){
+  const VERCEL=/\.vercel\.app$/.test(host);   // di Vercel foto/ ikut ter-deploy (daftar.json dibuat otomatis saat build) -> pakai itu dulu, GitHub cadangan
+  for(const fn of(LOCAL?[viaDir,viaManifest,viaGithub]:VERCEL?[viaManifest,viaGithub,viaDir]:[viaGithub,viaManifest,viaDir])){
     const l=await fn();if(l.length)return l.sort(nat).slice(0,80);
   }
   return[];

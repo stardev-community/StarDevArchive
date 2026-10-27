@@ -1,0 +1,7 @@
+{
+  "buildCommand": "node daftar.js",
+  "outputDirectory": ".",
+  "headers": [
+    { "source": "/lagu.m4a", "headers": [{ "key": "Cache-Control", "value": "public, max-age=86400" }] }
+  ]
+}

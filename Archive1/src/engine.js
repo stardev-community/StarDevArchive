@@ -369,7 +369,7 @@ function renderFrame(t){
   ctx.setTransform(1,0,0,1,0,0);ctx.globalAlpha=1;ctx.filter='none';ctx.fillStyle='#000';ctx.fillRect(0,0,W,H);
   ctx.save();
   const z=1+pulse*sc.amp;ctx.translate(W/2,H/2);
-  const dropAge=t-bt(64);const shk=(dropAge>=0&&dropAge<.5)?(1-dropAge/.5)*16:(sc.amp>.02?pulse*3:0);
+  const shk=0;   // tanpa getar: vibe santai
   const SR=rng(Math.floor(t*24)*7+3);ctx.translate((SR()-.5)*shk,(SR()-.5)*shk);ctx.scale(z,z);ctx.translate(-W/2,-H/2);
   if(sc.desk){drawDesk(sc,t)}else{
   ctx.drawImage(BG[sc.bg],0,0);

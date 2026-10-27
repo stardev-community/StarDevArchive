@@ -1,41 +1,41 @@
 # Cerita Kecil Kita
 
-Seluruh video sekarang satu **meja flat-lay** yang sama (polaroid, buku spiral, koran, bayangan jendela/daun, light-leak).
-- Detik 0-36 (beat 0-80): huruf potongan kertas (ransom-letter) tergeletak di atas meja. Meja abu-abu = bagian hitam-putih, meja kayu hangat = bagian berwarna.
-  Item di sini (tx/ph/scr/typed/script) tetap pakai koordinat LAYAR 1280x720. Tabel `OLDTABLE` di akhir `src/scenes.js` mengatur mood meja, gelap-terang, warna, dan kilatan transisi per scene.
-- Detik 36+ (beat 80+): tulisan tangan, kamera bergeser, koordinat = koordinat meja.
+Video murni (tanpa tombol / slider / teks di layar). **Ketuk layar = putar / jeda.** Lagu `lagu.m4a` otomatis dipakai.
+Seluruh video satu gaya: **meja flat-lay** santai (polaroid, buku spiral, koran, bayangan jendela/daun), tulisan tangan, kamera bergeser pelan.
+- Detik 0-14.7 (beat 0-32): meja abu-abu / hitam-putih = kenangan "dulu".
+- Detik 14.7+ (beat 32+): meja kayu hangat berwarna = "hidup mulai berwarna".
+- Tidak ada lagi getar layar / confetti / huruf potongan kertas.
 
 ## Struktur
-- `config.js`      -> **isi `repo` GitHub kamu di sini** (satu-satunya yang wajib diedit)
-- `foto/`          -> **taruh foto di sini, nama bebas** (jpg/png/webp). Otomatis kepakai, tidak perlu edit kode.
-- `img/`           -> 12 foto bawaan buat scene lama (0 - 36 detik). Mau ganti? timpa file dengan **nama yang sama**.
-- `src/scenes.js`  -> semua kata/lirik + beat + posisi item. Penjelasan format ada di komentar atas file.
-- `src/desk.js`    -> mesin gaya meja (biasanya nggak perlu disentuh)
-- `src/engine.js`, `src/photos.js`, `src/main.js` -> mesin lain
+- `config.js`   -> isi `repo` GitHub (kalau foto mau ditarik dari GitHub)
+- `foto/`       -> **taruh foto di sini, nama bebas** (jpg/png/webp). Otomatis kepakai. Urutan = urutan nama file.
+  - Bagian awal (hitam-putih) pakai foto ke-7, 9, 11, 12 (slot 6,8,10,11) — foto hitam-putih paling cocok di situ.
+- `src/scenes.js` -> semua kata/lirik + beat + posisi item (format dijelaskan di komentar atas file). `dp(slot,...)` = foto ke-(slot+1).
+- `src/desk.js`, `src/engine.js`, `src/photos.js`, `src/main.js` -> mesin
+- `termux.js` + `bikin-video.sh` -> bikin mp4 di Termux · `render.js` -> bikin mp4 di laptop (playwright)
 
-## Pakai GitHub (HTML narik semuanya dari sana)
-1. Buat repo (mis. `cerita-kecil-kita`), upload **seluruh isi folder ini**.
-2. Isi `repo:'usernamekamu/cerita-kecil-kita'` di `config.js`.
-3. Repo -> Settings -> Pages -> Branch `main` / root -> Save. Link-nya `https://usernamekamu.github.io/cerita-kecil-kita/`.
-4. **Ganti foto**: buka folder `foto/` di GitHub -> Add file -> Upload files (atau hapus yang lama). Refresh halaman, selesai.
-   - Urutan foto = urutan nama file (01, 02, 03 ... atau a, b, c). Foto ke-1 dipakai di slot pertama, dst.
-   - Foto lebih sedikit dari slot? Otomatis diulang. Foto banyak? Tambah `dp(16,...)`, `dp(17,...)` di scenes.js kalau mau dipakai semua.
-   - Foto HP yang besar (4000px) aman, otomatis dikecilkan saat dimuat.
-   - Daftar foto dibaca lewat GitHub API (batas 60x/jam per jaringan; kalau habis, pakai daftar terakhir yang tersimpan di browser).
-     File di GitHub kadang butuh beberapa menit sebelum kelihatan (cache).
+## Deploy (Vercel / GitHub Pages)
+Upload seluruh isi folder. Di Vercel, `vercel.json` otomatis menjalankan `node daftar.js` waktu build (membuat `foto/daftar.json`),
+jadi tambah / ganti foto di `foto/` lalu push = beres. Di GitHub Pages foto dibaca lewat GitHub API (isi `repo` di `config.js`).
 
-## Preview di laptop / Termux
-    python3 -m http.server 8000     # lalu buka http://localhost:8000
-Di localhost, foto dibaca dari folder `foto/` lokal (bukan GitHub). Jangan buka index.html langsung (file://).
-Tekan Putar (lagu.m4a otomatis). Geser slider buat lihat frame + nomor beat (detik = 0.44 + beat*0.4478).
+## Bikin video mp4 di Termux
+    pkg install nodejs ffmpeg
+    bash bikin-video.sh          # atau: node termux.js
+Lalu buka di Chrome: `http://localhost:8000/?bikin=1` (kebuka sendiri kalau `termux-api` terpasang).
+Biarkan layar nyala dan Chrome di depan sampai muncul **SELESAI** (sekitar beberapa menit). Hasil: `cerita_kecil_kita.mp4`
+(disalin ke folder Download kalau sudah `termux-setup-storage`).
+Pilihan di link: `&fps=24` · `&q=.85` (kualitas JPEG) · `&from=36&to=54.6` (render sebagian buat cek).
 
-## Build ke mp4
+## Bikin video di laptop
     npm i playwright && npx playwright install chromium
-    node render.js --out hasil.mp4
-    node render.js --from 36 --to 54.6 --out cek.mp4   # cek bagian meja aja
-Perlu ffmpeg. Render selalu pakai foto lokal di `foto/`. Pakai Chrome sendiri: CHROME_PATH=/path/chrome node render.js ...
+    node render.js --out hasil.mp4            # perlu ffmpeg
+    node render.js --from 0 --to 20 --out cek.mp4
+
+## Mengatur waktu / cek frame
+Buka `index.html?debug=1` -> muncul slider + nomor beat (detik = 0.44 + beat*0.4478). Tanpa `?debug=1` layar bersih.
+Preview lokal: `python3 -m http.server 8000` atau `node termux.js` (jangan buka lewat file://).
 
 ## Catatan
-- Meja abu-abu: foto dibuat hitam-putih (biar kayak referensi). Mau tetap berwarna: `deskBW:false` di config.js.
-- Font tulisan tangan bawaan: TeX Gyre Chorus. Mau yang lebih "tanda tangan"? isi `scriptFont:'Mrs Saint Delafield', scriptScale:1.6` di config.js (di-load dari Google Fonts, butuh internet).
-- Kalau panjang lagu/video beda, ubah DUR, START di baris atas src/engine.js.
+- Meja abu-abu: foto jadi hitam-putih. Mau tetap berwarna: `deskBW:false` di `config.js`.
+- Font tulisan tangan: TeX Gyre Chorus. Mau lebih "tanda tangan"? `scriptFont:'Mrs Saint Delafield', scriptScale:1.6` di `config.js` (butuh internet).
+- Panjang lagu/video beda? ubah `DUR`, `START` di baris atas `src/engine.js`.
