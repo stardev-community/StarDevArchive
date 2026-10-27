@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cerita Kecil Kita</title>
+<style>
+@font-face{font-family:"Lora";src:url(fonts/Lora-Variable.ttf);font-weight:400 700;font-style:normal}
+@font-face{font-family:"Lora";src:url(fonts/Lora-Italic-Variable.ttf);font-weight:400 700;font-style:italic}
+@font-face{font-family:"Poppins";src:url(fonts/Poppins-Bold.ttf);font-weight:700}
+@font-face{font-family:"Inter";src:url(fonts/Inter-Black.otf);font-weight:900}
+@font-face{font-family:"Inter";src:url(fonts/Inter-Medium.otf);font-weight:500}
+@font-face{font-family:"Liberation Serif";src:url(fonts/LiberationSerif-Bold.ttf);font-weight:700}
+@font-face{font-family:"Liberation Sans";src:url(fonts/LiberationSans-Bold.ttf);font-weight:700}
+@font-face{font-family:"Liberation Mono";src:url(fonts/LiberationMono-Bold.ttf);font-weight:700}
+@font-face{font-family:"DejaVu Serif";src:url(fonts/DejaVuSerif-Bold.ttf);font-weight:700}
+@font-face{font-family:"TeX Gyre Bonum";src:url(fonts/texgyrebonum-bold.otf);font-weight:700}
+@font-face{font-family:"TeX Gyre Schola";src:url(fonts/texgyreschola-bold.otf);font-weight:700}
+@font-face{font-family:"TeX Gyre Termes";src:url(fonts/texgyretermes-bolditalic.otf);font-weight:700;font-style:italic}
+@font-face{font-family:"TeX Gyre Termes";src:url(fonts/texgyretermes-bolditalic.otf);font-weight:700;font-style:normal}
+@font-face{font-family:"TeX Gyre Chorus";src:url(fonts/texgyrechorus-mediumitalic.otf);font-weight:400;font-style:italic}
+@font-face{font-family:"Caladea";src:url(fonts/Caladea-Bold.ttf);font-weight:700}
+@font-face{font-family:"GFS Baskerville";src:url(fonts/GFSBaskerville.otf);font-weight:400}
+html,body{margin:0;background:#0d0b0a;color:#f3ead6;font-family:system-ui,sans-serif}
+#wrap{max-width:1280px;margin:0 auto;position:relative}
+canvas{display:block;width:100%;height:auto;background:#000}
+#ui{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:12px 16px;font-size:14px}
+#ui button{background:#b3261e;color:#fff;border:0;padding:10px 18px;border-radius:6px;font-size:15px;cursor:pointer}
+#ui button:disabled{opacity:.4;cursor:default}
+#ui label{opacity:.85}
+#msg{opacity:.7}
+#seek{flex:1 1 260px}
+#clock{font:13px ui-monospace,monospace;opacity:.85;min-width:210px}
+.render #ui{display:none}
+</style></head>
+<body>
+<div id="wrap"><canvas id="c" width="1280" height="720"></canvas>
+<div id="ui"><label>1. Pilih file lagu (mp3): <input type="file" id="f" accept="audio/*"></label>
+<button id="play" disabled>2. Putar</button>
+<input type="range" id="seek" min="0" max="54.6" step="0.01" value="1"><span id="clock">t 1.00s | beat 1</span>
+<span id="msg">Lagu bawaan (lagu.m4a) otomatis dipakai; boleh pilih file lain di atas. Geser slider = lihat frame mana pun + nomor beat-nya.</span></div></div>
+<audio id="aud"></audio>
+<script src="config.js"></script>
+<script src="src/engine.js"></script>
+<script src="src/photos.js"></script>
+<script src="src/desk.js"></script>
+<script src="src/scenes.js"></script>
+<script src="src/main.js"></script>
+</body></html>

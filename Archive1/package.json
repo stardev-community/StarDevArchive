@@ -1,0 +1,1 @@
+{"name":"cerita-kecil-kita","private":true,"scripts":{"dev":"python3 -m http.server 8000","render":"node render.js","daftar":"node daftar.js"},"devDependencies":{"playwright":"^1.48.0"}}
